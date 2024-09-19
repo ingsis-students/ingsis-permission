@@ -9,5 +9,4 @@ class IngsisPermissionApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }
