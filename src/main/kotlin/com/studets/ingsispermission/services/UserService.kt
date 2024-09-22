@@ -2,7 +2,9 @@ package com.studets.ingsispermission.services
 
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.repositories.UserRepository
+import org.springframework.stereotype.Service
 
+@Service
 class UserService(private val userRepository: UserRepository) {
     fun getByEmail(email: String): User? {
         return userRepository.findByEmail(email)
