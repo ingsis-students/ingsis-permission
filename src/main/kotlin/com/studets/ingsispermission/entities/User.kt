@@ -1,7 +1,6 @@
 package com.studets.ingsispermission.entities
 
-import jakarta.persistence.Entity
-import jakarta.persistence.Table
+import jakarta.persistence.*
 
 @Entity
 @Table(name = "users")
@@ -14,5 +13,7 @@ data class User(
 
     @Column(nullable = true, unique = true)
     val auth0Id: String? = null
-)
+) {
+    constructor() : this(0, "@", "inexistent")
+}
 
