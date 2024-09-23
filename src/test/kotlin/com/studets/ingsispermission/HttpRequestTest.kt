@@ -18,7 +18,7 @@ import kotlin.test.assertTrue
 class HttpRequestTest {
 
     @LocalServerPort
-    private var port: Int = 5432
+    private var port: Int = 5003
 
     @Autowired
     private lateinit var restTemplate: TestRestTemplate

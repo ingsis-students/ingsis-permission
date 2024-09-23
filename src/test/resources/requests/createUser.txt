@@ -8,6 +8,5 @@ create
 
 {
   "id" : 1,
-  "email" : "mati@gmail.com",
-
+  "email" : "mati@gmail.com"
 }
