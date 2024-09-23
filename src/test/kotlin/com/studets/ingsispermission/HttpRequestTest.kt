@@ -25,36 +25,24 @@ class HttpRequestTest {
 
     @TestFactory
     fun dynamicHttpRequestTests(): Collection<DynamicTest> {
-        val creationFolder = "src/test/resources/requests/creations"
-        val getFolder = "src/test/resources/requests/gets"
+        val testFolders = listOf("src/test/resources/requests/creations", "src/test/resources/requests/getters")
 
-        val creationTests = File(creationFolder).listFiles()?.flatMap { file ->
-            if (isTextFile(file)) {
-                getParameters(file).flatMap { (requestType, requestBody, expectedResponse) ->
-                    when {
-                        requestType.contains("create") -> runCreateTest(requestBody, expectedResponse)
-                        else -> throw RuntimeException("Unexpected endpoint: $requestType")
+        return testFolders.flatMap { folderPath ->
+            val testFiles = File(folderPath).listFiles() ?: return emptyList()
+            testFiles.flatMap { file ->
+                if (isTextFile(file)) {
+                    getParameters(file).flatMap { (requestType, requestBody, expectedResponse) ->
+                        when {
+                            requestType.contains("get") -> runGetTest(file, requestType, expectedResponse)
+                            requestType.contains("create") -> runCreateTest(requestBody, expectedResponse)
+                            else -> throw RuntimeException("Unexpected endpoint: $requestType")
+                        }
                     }
+                } else {
+                    throw IllegalArgumentException("File ${file.name} is not a text file")
                 }
-            } else {
-                throw IllegalArgumentException("File ${file.name} is not a text file")
             }
-        } ?: emptyList()
-
-        val getTests = File(getFolder).listFiles()?.flatMap { file ->
-            if (isTextFile(file)) {
-                getParameters(file).flatMap { (requestType, _, expectedResponse) ->
-                    when {
-                        requestType.contains("get") -> runGetTest(file, requestType, expectedResponse)
-                        else -> throw RuntimeException("Unexpected endpoint: $requestType")
-                    }
-                }
-            } else {
-                throw IllegalArgumentException("File ${file.name} is not a text file")
-            }
-        } ?: emptyList()
-
-        return creationTests + getTests
+        }
     }
 
     private fun isTextFile(file: File): Boolean {

@@ -22,6 +22,4 @@ class UserController(private val userService: UserService) {
     fun getAllUsers(): ResponseEntity<List<User>> {
         return ResponseEntity.ok(userService.getAllUsers())
     }
-
-
 }

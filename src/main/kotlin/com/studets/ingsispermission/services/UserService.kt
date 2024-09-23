@@ -15,14 +15,6 @@ class UserService(private val userRepository: UserRepository) {
         return userRepository.save(user)
     }
 
-    fun updateUser(user: User): User {
-        return userRepository.save(user)
-    }
-
-    fun deleteUser(user: User) {
-        userRepository.delete(user)
-    }
-
     fun getAllUsers(): List<User> {
         return userRepository.findAll()
     }
