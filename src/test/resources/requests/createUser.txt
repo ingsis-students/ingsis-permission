@@ -1,0 +1,13 @@
+create
+
+#####
+
+{"email" : "mati@gmail.com"}
+
+#####
+
+{
+  "id" : 1,
+  "email" : "mati@gmail.com",
+
+}
