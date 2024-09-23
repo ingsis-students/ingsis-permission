@@ -1,0 +1,13 @@
+get
+
+#####
+
+{"email" : "matiass@gmail.com"}
+
+#####
+
+{
+  "id" : 5,
+  "email" : "matiass@gmail.com",
+  "auth0Id" : null
+}
