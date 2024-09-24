@@ -50,7 +50,7 @@ class UserRepositoryTest {
         userRepository.save(testUser1)
         userRepository.save(testUser2)
         val users = userRepository.findAll()
-        assertEquals(2, users.size)  // Assuming the DB is empty before the test
+        assertEquals(2, users.size) // Assuming the DB is empty before the test
         assertTrue(users.any { it.email == "user1@example.com" })
         assertTrue(users.any { it.email == "user2@example.com" })
     }
