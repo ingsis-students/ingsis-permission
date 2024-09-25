@@ -1,15 +1,37 @@
+version: '3'
+
 services:
-  db:
-    image: postgres:alpine
-    container_name: ingsis-user-db
-    restart: always
+  # Spring app service
+  spring_api:
+    container_name: spring_api
+    build:
+      context: . #ubicación del dockerfile
+      dockerfile: Dockerfile.multi
+    ports:
+        - '8083:8080' #puerto del contenedor:puerto del host
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - DB_USER= ${POSTGRES_USER}
+      - DB_PASSWORD= ${POSTGRES_PASSWORD}
+      - DB_NAME= ${POSTGRES_DB}
+      - DB_HOST= ${DB_HOST}
+      - DB_PORT= ${DB_PORT}
+    depends_on:
+      - db
+
+  #Postgres Database
+  db:
+    image: postgres:alpine #dockerhub
+    container_name: ingsis-user-db
     ports:
       - '5003:5432'
+    environment:
+      - POSTGRES_USER= ${POSTGRES_USER}
+      - POSTGRES_PASSWORD= ${POSTGRES_PASSWORD}
+      - POSTGRES_DB= ${POSTGRES_DB}
     volumes:
       - db-data-ingsis-user:/var/lib/postgresql/data
+
+
 volumes:
   db-data-ingsis-user:
+    external: false
