@@ -19,9 +19,8 @@ services:
       - db
 
   #Postgres Database
-  db:
+  ingsis-permission-db:
     image: postgres:12 #dockerhub
-    container_name: ingsis-user-db
     ports:
       - '5003:5432'
     environment:

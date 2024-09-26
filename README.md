@@ -1,7 +1,7 @@
 database and spring
 - docker build -t ingsis-permission-spring-api -f Dockerfile.multi .
-- docker-compose up -d db
-- docker run --env-file .env -p 8083:8080 ingsis-permission-spring_api
+- docker compose up -d db
+- docker run --env-file .env -p 8083:8080 ingsis-permission-spring-api
 - docker ps (to verify)
 
 if any issues
