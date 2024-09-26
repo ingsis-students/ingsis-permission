@@ -1,0 +1,14 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5003/postgres #url a la que le pego desde tests/insomnia. (EXT)
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: password
+    platform: postgres
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
