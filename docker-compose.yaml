@@ -3,20 +3,21 @@ version: '3'
 services:
   # Spring app service
   spring_api:
-    container_name: spring_api
     build:
       context: . #ubicación del dockerfile
       dockerfile: Dockerfile.multi
     ports:
         - '8083:8080' #puerto del contenedor:puerto del host
     environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://ingsis-permission-db:5432/compose-postgres
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
       DB_USER: ${POSTGRES_USER}
       DB_PASSWORD: ${POSTGRES_PASSWORD}
       DB_NAME: ${POSTGRES_DB}
       DB_HOST: ${DB_HOST} # service name of postgres container
-      DB_PORT: ${DB_PORT} # postgres internal port
-    depends_on:
-      - db
+      DB_PORT: ${POSTGRES_EXT_PORT} # postgres internal port
 
   #Postgres Database
   ingsis-permission-db:
