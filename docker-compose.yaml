@@ -3,6 +3,7 @@ version: '3'
 services:
   # Spring app service
   spring_api:
+    image: ghcr.io/matichialvaa/ingsis-permission
     build:
       context: . #ubicación del dockerfile
       dockerfile: Dockerfile.multi
