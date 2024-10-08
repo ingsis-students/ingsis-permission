@@ -3,7 +3,7 @@ name: continuous delivery
 on:
   push:
     branches:
-      - main
+      - master
   workflow_run:
     workflows: [ "continuous deployment" ]
     types:
