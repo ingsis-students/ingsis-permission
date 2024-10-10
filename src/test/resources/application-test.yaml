@@ -8,5 +8,7 @@ spring:
     username: sa
     password: password
     url: jdbc:h2:mem:testdb # runs in mem, lost when stop.
-  profiles:
-    active: test
+  h2:
+    console:
+      enabled: true
+

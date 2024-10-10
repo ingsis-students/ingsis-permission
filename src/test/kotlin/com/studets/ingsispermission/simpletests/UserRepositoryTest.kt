@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @SpringBootTest
 @Transactional
-@ActiveProfiles("test") // use test database - h2
+@ActiveProfiles(value = ["test"]) // use test database - h2
 class UserRepositoryTest {
 
     @Autowired
