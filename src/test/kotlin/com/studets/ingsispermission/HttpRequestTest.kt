@@ -19,7 +19,8 @@ import org.springframework.test.context.ActiveProfiles
 import java.io.File
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional // rollback after running tests
+//@Transactional // rollback after running tests
+@ActiveProfiles("test")
 class HttpRequestTest {
 
     @LocalServerPort
