@@ -2,12 +2,14 @@ package com.studets.ingsispermission
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.services.UserService
 import jakarta.transaction.Transactional
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.http.HttpEntity
@@ -18,11 +20,13 @@ import java.io.File
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional // rollback after running tests
-@ActiveProfiles(value = ["test"]) // use test database - h2
 class HttpRequestTest {
 
     @LocalServerPort
     private var port: Int = 5003
+
+    @MockBean
+    private lateinit var userService: UserService
 
     @Autowired
     private lateinit var restTemplate: TestRestTemplate
