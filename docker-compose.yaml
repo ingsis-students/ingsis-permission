@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  # Spring app service
+  # Spring app service de los usuarios
   spring_api:
     build:
       context: . #ubicación del dockerfile
