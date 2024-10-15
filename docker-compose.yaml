@@ -6,7 +6,7 @@ services:
     build:
       context: . #ubicación del dockerfile
       dockerfile: Dockerfile.multi
-    image: ghcr.io/matichialvaa/ingsis-permission:latest # FIXME HAY QUE CAMBIAR matichialvaa por ingsis-students
+    image: ghcr.io/ingsis-students/ingsis-permission:latest
     ports:
         - '8083:8080' #puerto del contenedor:puerto del host
     environment:
