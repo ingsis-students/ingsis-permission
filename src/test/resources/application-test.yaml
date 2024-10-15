@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.H2Dialect # generate sql for h2 from hibernate
+    show-sql: true
+  datasource:
+    url: jdbc:h2:mem:testdb # runs in mem, lost when stop.
+    driver-class-name: org.h2.Driver # driver to connect spring & h2
+    username: sa
+    password: password
+
+
+

@@ -2,23 +2,33 @@ package com.studets.ingsispermission.simpletests
 
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.repositories.UserRepository
+import com.studets.ingsispermission.services.UserService
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.transaction.annotation.Transactional
 
-@SpringBootTest
-@Transactional
+@SpringBootTest() // starts app context to run tests
+@ActiveProfiles("test") // use test database - h2
 class UserRepositoryTest {
 
     @Autowired
+    private lateinit var userService: UserService
+
+    @MockBean //mock of the repo
     private lateinit var userRepository: UserRepository
 
     @Test
-    @Transactional // to rollback changes
+    //@Transactional // to rollback changes
     fun `add user to db`() {
         val user = User(email = "mati@example.com", auth0Id = "123")
         val savedUser = userRepository.save(user)
@@ -31,7 +41,7 @@ class UserRepositoryTest {
     }
 
     @Test
-    @Transactional
+    //@Transactional
     fun `find by email should return user`() {
         val testUser = User(email = "test@example.com", auth0Id = "auth0|123456")
         userRepository.save(testUser)
