@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5003/postgres #url a la que le pego desde tests/insomnia. (EXT)
+    url: jdbc:postgresql://localhost:5003/postgres # url a la que le pego desde tests/insomnia. (EXT)
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: password

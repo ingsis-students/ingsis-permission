@@ -2,6 +2,7 @@ package com.studets.ingsispermission.services
 
 import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.errors.UserNotFoundException
 import com.studets.ingsispermission.repositories.UserRepository
 import com.studets.ingsispermission.repositories.UserSnippetsRepository
 import org.springframework.http.ResponseEntity
@@ -15,7 +16,7 @@ class UserService(
     fun getByEmail(email: String): User? {
         val user = userRepository.findByEmail(email)
         if (user == null) {
-            throw NoSuchElementException("User not found")
+            throw UserNotFoundException("User not found when trying to get by email")
         }
         return user
     }
@@ -32,7 +33,7 @@ class UserService(
     fun updateUser(user: User): User? {
         val userOptional = userRepository.findById(user.id!!)
         if (userOptional.isEmpty) {
-            throw NoSuchElementException("User not found")
+            throw UserNotFoundException("User not found when trying to update it")
         }
         val updatedUser = userOptional.get().copy(email = user.email, auth0Id = user.auth0Id)
         userRepository.save(updatedUser)
@@ -40,7 +41,7 @@ class UserService(
     }
 
     fun addSnippetToUser(email: String, snippetId: Long, role: String): ResponseEntity<String> {
-        val user = getByEmail(email) ?: throw NoSuchElementException("User not found")
+        val user = getByEmail(email) ?: throw UserNotFoundException("User not found when trying to add a snippet to it")
         val snippets = Snippet(user = user, snippetId = snippetId, role = role)
 
         if (userSnippetRelationExists(user, snippetId)) {
@@ -65,7 +66,9 @@ class UserService(
     }
 
     fun checkIfOwner(snippetId: Long, email: String): Boolean {
-        val user = getByEmail(email) ?: throw NoSuchElementException("User not found")
+        val user = getByEmail(email)
+            ?: throw UserNotFoundException("User not found when trying to check if it is the owner of a snippet")
+
         userSnippetsRepository.findByUserId(user.id!!).forEach {
             if (it.snippetId == snippetId) {
                 return it.role == "Owner"
