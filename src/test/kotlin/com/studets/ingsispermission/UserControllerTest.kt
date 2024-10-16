@@ -36,8 +36,6 @@ class UserControllerTest {
     @MockBean
     private lateinit var userSnippetsRepository: UserSnippetsRepository
 
-
-
     @BeforeEach
     fun setup() {
         val users = UserFixture.all()
