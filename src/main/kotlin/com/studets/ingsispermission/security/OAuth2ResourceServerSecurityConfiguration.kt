@@ -25,7 +25,7 @@ class OAuth2ResourceServerSecurityConfiguration(
     )
     val audience: String,
     @Value(
-        "\${spring.security.oauth2.resourceserver.jwt.issuer-uri}"
+        "\${spring.security.oauth2.resourceserver.jwt.issuer-uri}/"
     )
     val issuer: String
 ) {
@@ -33,6 +33,7 @@ class OAuth2ResourceServerSecurityConfiguration(
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http.authorizeHttpRequests {
             it
+                .requestMatchers("/").permitAll()
                 .requestMatchers(GET, "/api/user").hasAuthority("SCOPE_read:snippets")
                 .requestMatchers(GET, "/api/user/{email}").hasAuthority("SCOPE_read:snippets")
                 .requestMatchers(POST, "/api/user").hasAuthority("SCOPE_read:snippets")
