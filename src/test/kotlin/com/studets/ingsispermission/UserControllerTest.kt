@@ -55,13 +55,14 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = ["SCOPE_read:snippets"])
+    @WithMockUser(authorities = ["SCOPE_read:snippets"]) // mock security
     fun `can get user by email`() {
         val user = userController.getUserByEmail("mati@example.com")
         assertNotNull(user, "User should not be null")
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `can get user by auth0id`() {
         val user = userRepository.findByAuth0Id("auth0-122")
         assertNotNull(user, "User should not be null")
@@ -74,6 +75,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `can create user`() {
         val user = User(email = "nacho@example.com", auth0Id = "auth0-321")
         val response = userController.createUser(user)
@@ -82,6 +84,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `find all should return all users`() {
         val users = userController.getAllUsers().body!!
         assertEquals(8, users.size)
@@ -90,6 +93,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `can update user`() {
         val user = User(id = 1, email = "mati@gmail.com", auth0Id = "auth0-123")
         val response = userController.updateUser(user)
@@ -97,18 +101,21 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `can add snippet to user`() {
         val response = userController.addSnippetToUser("mati@example.com", UserSnippet(1, "admin"))
         assertTrue(response.body == "Snippet added to user")
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `can check if user is owner of snippet`() {
         val response = userController.checkIfOwner(CheckRequest(2, "mati@example.com"))
         assertTrue(response.body == "User is the owner of the snippet")
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `find user non-existent throws exception`() {
         val exception = assertFailsWith<Exception> {
             userController.getUserByEmail("nonexistent@gmail.com")
