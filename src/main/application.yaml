@@ -18,10 +18,10 @@ spring:
   security:
     oauth2:
       resourceserver:
-        jwt:
-          issuer-uri: ${AUTH_SERVER_URI}
+        jwt: #use jwt validation for requests
+          issuer-uri: ${AUTH_SERVER_URI} #against issuer uri(auth0)
           client-id: ${AUTH_CLIENT_ID}
           client-secret: ${AUTH_CLIENT_SECRET}
 
 auth0:
-  audience: ${AUTH0_AUDIENCE}
+  audience: ${AUTH0_AUDIENCE} #identify ingsis-students api.
