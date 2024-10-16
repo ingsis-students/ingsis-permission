@@ -10,5 +10,15 @@ spring:
     username: sa
     password: password
 
+  application:
+    name: permission-api
+  security:
+    oauth2:
+      resourceserver:
+        jwt: #use jwt validation for requests
+          issuer-uri: ${AUTH_SERVER_URI} #against issuer uri(auth0)
+          audience: ${AUTH0_AUDIENCE} #identify ingsis-students api.
 
 
+auth0:
+  audience: ${AUTH0_AUDIENCE} #identify ingsis-students api.
