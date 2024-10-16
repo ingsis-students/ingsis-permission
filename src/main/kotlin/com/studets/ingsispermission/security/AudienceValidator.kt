@@ -14,6 +14,5 @@ class AudienceValidator(private val audience: String) : OAuth2TokenValidator<Jwt
                 OAuth2Error("invalid_token", "The required audience is missing", null)
             )
         }
-
     }
 }
