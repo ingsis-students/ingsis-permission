@@ -62,7 +62,6 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `can get user by auth0id`() {
         val user = userRepository.findByAuth0Id("auth0-122")
         assertNotNull(user, "User should not be null")
@@ -75,7 +74,7 @@ class UserControllerTest {
     }
 
     @Test
-    @WithMockUser(authorities = ["SCOPE_read:snippets"])
+    @WithMockUser(authorities = ["SCOPE_read:snippets"]) // mock security
     fun `can create user`() {
         val user = User(email = "nacho@example.com", auth0Id = "auth0-321")
         val response = userController.createUser(user)

@@ -17,6 +17,6 @@ spring:
       resourceserver:
         jwt: #use jwt validation for requests
           issuer-uri: https://students-ingsis.us.auth0.com/
-          audience: https://students.ingsis.com/api
 
-
+auth0:
+  audience: https://students.ingsis.com/api

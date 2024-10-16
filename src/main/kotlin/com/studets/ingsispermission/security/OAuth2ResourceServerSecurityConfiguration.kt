@@ -25,7 +25,7 @@ class OAuth2ResourceServerSecurityConfiguration(
     )
     val audience: String,
     @Value(
-        "\${spring.security.oauth2.resourceserver.jwt.issuer-uri}/"
+        "\${spring.security.oauth2.resourceserver.jwt.issuer-uri}"
     )
     val issuer: String
 ) {

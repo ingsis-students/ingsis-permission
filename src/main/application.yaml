@@ -23,5 +23,5 @@ spring:
           client-id: ${AUTH_CLIENT_ID}
           client-secret: ${AUTH_CLIENT_SECRET}
 
-auth0:
+auth0: #token specifically created to access an api.
   audience: ${AUTH0_AUDIENCE} #identify ingsis-students api.
