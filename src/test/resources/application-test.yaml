@@ -16,9 +16,9 @@ spring:
     oauth2:
       resourceserver:
         jwt: #use jwt validation for requests
-          issuer-uri: ${AUTH_SERVER_URI} #against issuer uri(auth0)
-          audience: ${AUTH0_AUDIENCE} #identify ingsis-students api.
+          issuer-uri: https://students-ingsis.us.auth0.com
+          audience: https://students.ingsis.com/api
 
 
 auth0:
-  audience: ${AUTH0_AUDIENCE} #identify ingsis-students api.
+  audience: https://students.ingsis.com/api

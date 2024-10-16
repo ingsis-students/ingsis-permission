@@ -18,6 +18,7 @@ import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import java.util.Optional
 import kotlin.test.assertFailsWith
@@ -34,6 +35,8 @@ class UserControllerTest {
 
     @MockBean
     private lateinit var userSnippetsRepository: UserSnippetsRepository
+
+
 
     @BeforeEach
     fun setup() {
@@ -52,6 +55,7 @@ class UserControllerTest {
     }
 
     @Test
+    @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `can get user by email`() {
         val user = userController.getUserByEmail("mati@example.com")
         assertNotNull(user, "User should not be null")
