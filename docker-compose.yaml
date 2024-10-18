@@ -19,7 +19,6 @@ services:
       AUTH_SERVER_URI: ${AUTH_SERVER_URI}
       AUTH_CLIENT_ID: ${AUTH_CLIENT_ID}
       AUTH_CLIENT_SECRET: ${AUTH_CLIENT_SECRET}
-      spring.security.oauth2.resourceserver.jwt.issuer-uri: ${AUTH_SERVER_URI}
 
   #Postgres Database
   ingsis-permission-db:
