@@ -1,10 +1,12 @@
 spring:
+  application:
+    name: permission-api
+
   datasource:
-    url: jdbc:postgresql://localhost:5003/postgres # url a la que le pego desde tests/insomnia. (EXT)
+    url: jdbc:postgresql://localhost:5003/postgres
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: password
-    platform: postgres
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -13,15 +15,17 @@ spring:
     hibernate:
       ddl-auto: update
 
-  application:
-    name: permission-api
+  sql:
+    init:
+      platform: postgres
+
   security:
     oauth2:
       resourceserver:
-        jwt: #use jwt validation for requests
-          issuer-uri: ${AUTH_SERVER_URI} #against issuer uri(auth0)
+        jwt:
+          issuer-uri: ${AUTH_SERVER_URI}
           client-id: ${AUTH_CLIENT_ID}
           client-secret: ${AUTH_CLIENT_SECRET}
 
-auth0: #token specifically created to access an api.
-  audience: ${AUTH0_AUDIENCE} #identify ingsis-students api
+auth0:
+  audience: ${AUTH0_AUDIENCE}
