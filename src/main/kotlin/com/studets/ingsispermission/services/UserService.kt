@@ -2,6 +2,7 @@ package com.studets.ingsispermission.services
 
 import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.errors.UserNotFoundException
 import com.studets.ingsispermission.repositories.UserRepository
 import com.studets.ingsispermission.repositories.UserSnippetsRepository
@@ -80,5 +81,11 @@ class UserService(
             }
         }
         return false
+    }
+
+    fun getSnippets(id: Long) : ResponseEntity<List<Snippet>> {
+        val user = userRepository.findById(id).orElseThrow { UserNotFoundException("User not found when trying to get snippets") }
+        val snippets = userSnippetsRepository.findByUserId(user.id!!)
+        return ResponseEntity.ok(snippets)
     }
 }

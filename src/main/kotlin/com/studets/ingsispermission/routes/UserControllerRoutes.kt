@@ -1,5 +1,6 @@
 package com.studets.ingsispermission.routes
 
+import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
@@ -42,4 +43,7 @@ interface UserControllerRoutes {
     /** This method is used to validate a user in auth */
     @GetMapping("/validate")
     fun validate(@AuthenticationPrincipal token: String): ResponseEntity<Long>
+
+    @GetMapping("/snippets")
+    fun getUserSnippets(id: Long): ResponseEntity<List<Snippet>>
 }

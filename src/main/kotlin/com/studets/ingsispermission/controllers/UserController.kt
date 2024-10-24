@@ -1,5 +1,6 @@
 package com.studets.ingsispermission.controllers
 
+import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
@@ -11,13 +12,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/user")
@@ -58,7 +53,7 @@ class UserController(private val userService: UserService,
     }
 
     @GetMapping("/validate")
-    override fun validate(token: String): ResponseEntity<Long> {
+    override fun validate(@RequestHeader("Authorization") token: String): ResponseEntity<Long> {
         val actualToken = token.removePrefix("Bearer ")
         val jwt = jwtDecoder.decode(actualToken)
         val auth0Id = jwt.claims["sub"] as String
@@ -69,5 +64,10 @@ class UserController(private val userService: UserService,
         } else {
             ResponseEntity.status(HttpStatus.NOT_FOUND).build() // no body.
         }
+    }
+
+    @GetMapping("/snippets")
+    override fun getUserSnippets(id: Long): ResponseEntity<List<Snippet>> {
+        return userService.getSnippets(id)
     }
 }
