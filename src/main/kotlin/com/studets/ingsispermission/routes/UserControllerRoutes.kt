@@ -4,6 +4,8 @@ import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
@@ -36,4 +38,8 @@ interface UserControllerRoutes {
     /** This method is used to check if a user is the owner of a snippet */
     @PostMapping("/check-owner")
     fun checkIfOwner(@RequestBody checkRequest: CheckRequest): ResponseEntity<String>
+
+    /** This method is used to validate a user in auth */
+    @GetMapping("/validate")
+    fun validate(@AuthenticationPrincipal jwt: Jwt): ResponseEntity<Long>
 }

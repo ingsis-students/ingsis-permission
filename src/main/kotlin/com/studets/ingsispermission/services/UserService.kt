@@ -21,6 +21,11 @@ class UserService(
         return user
     }
 
+    fun getByAuthId(auth0Id: String): User? {
+        return userRepository.findByAuth0Id(auth0Id)
+            ?: throw UserNotFoundException("User not found when trying to get by auth0Id")
+    }
+
     fun createUser(email: String, auth0Id: String): User {
         val user = User(email = email, auth0Id = auth0Id)
         return userRepository.save(user)

@@ -5,7 +5,10 @@ import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.routes.UserControllerRoutes
 import com.studets.ingsispermission.services.UserService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -49,5 +52,18 @@ class UserController(private val userService: UserService) : UserControllerRoute
         } else {
             ResponseEntity.badRequest().body("User is not the owner of the snippet")
         }
+    }
+
+    @GetMapping("/validate")
+    override fun validate(@AuthenticationPrincipal jwt: Jwt): ResponseEntity<Long> {
+        val auth0Id = jwt.claims["sub"] as String
+
+        val user = userService.getByAuthId(auth0Id)
+        return if (user != null) {
+            ResponseEntity.ok(user.id)
+        } else {
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build() // no body.
+        }
+
     }
 }
