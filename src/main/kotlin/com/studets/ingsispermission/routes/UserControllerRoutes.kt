@@ -41,5 +41,5 @@ interface UserControllerRoutes {
 
     /** This method is used to validate a user in auth */
     @GetMapping("/validate")
-    fun validate(@AuthenticationPrincipal jwt: Jwt): ResponseEntity<Long>
+    fun validate(@AuthenticationPrincipal token: String): ResponseEntity<Long>
 }
