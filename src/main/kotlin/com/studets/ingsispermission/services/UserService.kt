@@ -15,9 +15,7 @@ class UserService(
 ) {
     fun getByEmail(email: String): User? {
         val user = userRepository.findByEmail(email)
-        if (user == null) {
-            throw UserNotFoundException("User not found when trying to get by email")
-        }
+            ?: throw UserNotFoundException("User not found when trying to get by email")
         return user
     }
 
