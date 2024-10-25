@@ -10,19 +10,27 @@ import com.studets.ingsispermission.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.oauth2.jwt.JwtDecoder
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestHeader
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/user")
-class UserController(private val userService: UserService,
-                     private val snippetService: SnippetService,
-                     private val jwtDecoder: JwtDecoder) : UserControllerRoutes {
+class UserController(
+    private val userService: UserService,
+    private val jwtDecoder: JwtDecoder,
+    private val snippetService: SnippetService
+) : UserControllerRoutes {
     @PostMapping
     override fun createUser(@RequestBody user: User): ResponseEntity<User> {
         val newUser = userService.createUser(user.email, user.auth0Id)
-        snippetService.postDefaultLintRules(user.id!!)
-        snippetService.postDefaultFormatRules(user.id)
-
+        snippetService.postDefaultLintRules(newUser.id!!)
+        snippetService.postDefaultFormatRules(newUser.id)
         return ResponseEntity.ok(newUser)
     }
 
