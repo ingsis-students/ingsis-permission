@@ -6,6 +6,7 @@ import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.routes.UserControllerRoutes
 import com.studets.ingsispermission.security.OAuth2ResourceServerSecurityConfiguration
+import com.studets.ingsispermission.services.SnippetService
 import com.studets.ingsispermission.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,10 +18,14 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/user")
 class UserController(private val userService: UserService,
+                     private val snippetService: SnippetService,
                      private val jwtDecoder: JwtDecoder) : UserControllerRoutes {
     @PostMapping
     override fun createUser(@RequestBody user: User): ResponseEntity<User> {
-        return ResponseEntity.ok(userService.createUser(user.email, user.auth0Id))
+        val newUser = userService.createUser(user.email, user.auth0Id)
+        snippetService.postDefaultLintRules(user.id!!)
+
+        return ResponseEntity.ok(newUser)
     }
 
     @GetMapping("/{email}") // once implemented auth0, this would be auth0Id.
