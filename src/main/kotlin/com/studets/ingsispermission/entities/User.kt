@@ -30,3 +30,7 @@ data class User(
         return "User(id=$id, email='$email', auth0Id='$auth0Id')"
     }
 }
+
+data class CreateUser(
+    val email: String
+)

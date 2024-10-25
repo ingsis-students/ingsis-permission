@@ -1,24 +1,25 @@
 package com.studets.ingsispermission.routes
 
+import com.studets.ingsispermission.entities.CreateUser
 import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestHeader
 
 /** This interface is used to define the routes of the user controller */
 interface UserControllerRoutes {
 
     /** This method is used to create a user */
     @PostMapping
-    fun createUser(@RequestBody user: User): ResponseEntity<User>
+    fun create(@RequestHeader token: String, @RequestBody createUser: CreateUser): ResponseEntity<User>
 
     /** This method is used to get a user by email */
     @GetMapping("/{email}")

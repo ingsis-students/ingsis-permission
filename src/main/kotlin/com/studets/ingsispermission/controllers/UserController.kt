@@ -1,5 +1,6 @@
 package com.studets.ingsispermission.controllers
 
+import com.studets.ingsispermission.entities.CreateUser
 import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.request_types.CheckRequest
@@ -27,8 +28,12 @@ class UserController(
     private val snippetService: SnippetService
 ) : UserControllerRoutes {
     @PostMapping
-    override fun createUser(@RequestBody user: User): ResponseEntity<User> {
-        val newUser = userService.createUser(user.email, user.auth0Id)
+    override fun create(
+        @RequestHeader("Authorization") token: String,
+        @RequestBody createUser: CreateUser
+    ): ResponseEntity<User> {
+        val auth0Id = jwtDecoder.decode(token.removePrefix("Bearer ")).claims["sub"] as String
+        val newUser = userService.createUser(createUser.email, auth0Id)
         snippetService.postDefaultLintRules(newUser.id!!)
         snippetService.postDefaultFormatRules(newUser.id)
         return ResponseEntity.ok(newUser)
