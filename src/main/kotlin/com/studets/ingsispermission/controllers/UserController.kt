@@ -5,13 +5,10 @@ import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.routes.UserControllerRoutes
-import com.studets.ingsispermission.security.OAuth2ResourceServerSecurityConfiguration
 import com.studets.ingsispermission.services.SnippetService
 import com.studets.ingsispermission.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.web.bind.annotation.*
 
@@ -24,6 +21,7 @@ class UserController(private val userService: UserService,
     override fun createUser(@RequestBody user: User): ResponseEntity<User> {
         val newUser = userService.createUser(user.email, user.auth0Id)
         snippetService.postDefaultLintRules(user.id!!)
+        snippetService.postDefaultFormatRules(user.id)
 
         return ResponseEntity.ok(newUser)
     }
