@@ -18,7 +18,7 @@ object UserFixture {
     }
 
     val JULIO_CESAR = User(email = "juliocesar@gmail.com", auth0Id = "auth0-122")
-    val MATI_CHIALVA = User(id=19000, email = "mati@example.com", auth0Id = "auth0-123")
+    val MATI_CHIALVA = User(id = 19000, email = "mati@example.com", auth0Id = "auth0-123")
     val MARCO_AURELIO = User(email = "marcoaurelio@gmail.com", auth0Id = "auth0-124")
     val AUGUSTUS = User(email = "augustus@gmail.com", auth0Id = "auth0-125")
     val NERO = User(email = "nero@gmail.com", auth0Id = "auth0-126")
