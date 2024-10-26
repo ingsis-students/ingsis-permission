@@ -27,7 +27,7 @@ class UserController(
     private val jwtDecoder: JwtDecoder,
     private val snippetService: SnippetService
 ) : UserControllerRoutes {
-    @PostMapping
+    @PostMapping("/")
     override fun create(
         @RequestHeader("Authorization") token: String,
         @RequestBody createUser: CreateUser
@@ -39,14 +39,14 @@ class UserController(
         return ResponseEntity.ok(newUser)
     }
 
+    @GetMapping("/")
+    override fun getAllUsers(): ResponseEntity<List<User>> {
+        return ResponseEntity.ok(userService.getAllUsers())
+    }
+
     @GetMapping("/{email}") // once implemented auth0, this would be auth0Id.
     override fun getUserByEmail(@PathVariable email: String): ResponseEntity<User> {
         return ResponseEntity.ok(userService.getByEmail(email)!!)
-    }
-
-    @GetMapping
-    override fun getAllUsers(): ResponseEntity<List<User>> {
-        return ResponseEntity.ok(userService.getAllUsers())
     }
 
     @PutMapping("/{email}")
