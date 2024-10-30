@@ -27,16 +27,24 @@ class UserController(
     private val jwtDecoder: JwtDecoder,
     private val snippetService: SnippetService
 ) : UserControllerRoutes {
+
     @PostMapping("/")
     override fun create(
         @RequestHeader("Authorization") token: String,
         @RequestBody createUser: CreateUser
     ): ResponseEntity<User> {
         val auth0Id = jwtDecoder.decode(token.removePrefix("Bearer ")).claims["sub"] as String
-        val newUser = userService.createUser(createUser.email, auth0Id)
-        // snippetService.postDefaultLintRules(newUser.id!!) FIXME for now to begin with skeleton
-        // snippetService.postDefaultFormatRules(newUser.id) FIXME habría que cambiar el localhost para que apunte a la ip del servicio de snippets
-        return ResponseEntity.ok(newUser)
+
+        val existingUser = userService.getByEmail(createUser.email)
+
+        return if (existingUser != null) {
+            ResponseEntity.status(HttpStatus.CONFLICT).body(existingUser)
+        } else {
+            val newUser = userService.createUser(createUser.email, auth0Id)
+            // snippetService.postDefaultLintRules(newUser.id!!) FIXME for now to begin with skeleton
+            // snippetService.postDefaultFormatRules(newUser.id) FIXME habría que cambiar el localhost para que apunte a la ip del servicio de snippets
+            ResponseEntity.ok(newUser)
+        }
     }
 
     @GetMapping("/")
@@ -50,7 +58,10 @@ class UserController(
     }
 
     @PostMapping("/add-snippet/{email}")
-    override fun addSnippetToUser(@PathVariable email: String, @RequestBody addSnippet: UserSnippet): ResponseEntity<String> {
+    override fun addSnippetToUser(
+        @PathVariable email: String,
+        @RequestBody addSnippet: UserSnippet
+    ): ResponseEntity<String> {
         return userService.addSnippetToUser(email, addSnippet.snippetId, addSnippet.role)
     }
 
