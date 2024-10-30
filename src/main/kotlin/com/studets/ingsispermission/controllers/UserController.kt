@@ -44,11 +44,6 @@ class UserController(
         return ResponseEntity.ok(userService.getAllUsers())
     }
 
-    @GetMapping("/{email}") // once implemented auth0, this would be auth0Id.
-    override fun getUserByEmail(@PathVariable email: String): ResponseEntity<User> {
-        return ResponseEntity.ok(userService.getByEmail(email)!!)
-    }
-
     @PutMapping("/{email}")
     override fun updateUser(@RequestBody user: User): ResponseEntity<User> {
         return ResponseEntity.ok(userService.updateUser(user))
@@ -85,5 +80,10 @@ class UserController(
     @GetMapping("/snippets")
     override fun getUserSnippets(id: Long): ResponseEntity<List<Snippet>> {
         return userService.getSnippets(id)
+    }
+
+    @GetMapping("/{email}") // once implemented auth0, this would be auth0Id.
+    override fun getUserByEmail(@PathVariable email: String): ResponseEntity<User> {
+        return ResponseEntity.ok(userService.getByEmail(email)!!)
     }
 }
