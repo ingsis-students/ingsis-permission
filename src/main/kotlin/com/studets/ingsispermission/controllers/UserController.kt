@@ -5,6 +5,7 @@ import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
+import com.studets.ingsispermission.errors.UserNotFoundException
 import com.studets.ingsispermission.routes.UserControllerRoutes
 import com.studets.ingsispermission.services.SnippetService
 import com.studets.ingsispermission.services.UserService
@@ -35,8 +36,11 @@ class UserController(
     ): ResponseEntity<User> {
         val auth0Id = jwtDecoder.decode(token.removePrefix("Bearer ")).claims["sub"] as String
 
-        val existingUser = userService.getByEmail(createUser.email)
-
+        val existingUser = try {
+            userService.getByEmail(createUser.email)
+        } catch (e: UserNotFoundException) {
+            null
+        }
         return if (existingUser != null) {
             ResponseEntity.status(HttpStatus.CONFLICT).body(existingUser)
         } else {
