@@ -52,7 +52,7 @@ class UserController(
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/get/{id}")
     override fun getUserById(@PathVariable id: Long): ResponseEntity<UserDTO> {
         val user = userService.getById(id)
         return ResponseEntity.ok(UserDTO(user))
