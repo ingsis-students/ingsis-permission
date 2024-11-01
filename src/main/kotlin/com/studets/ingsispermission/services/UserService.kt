@@ -76,11 +76,11 @@ class UserService(
         val user = userRepository.findByEmail(email)
             ?: throw UserNotFoundException("User not found when trying to check if it is the owner of a snippet")
 
-//        userSnippetsRepository.findByUserId(user.id!!).forEach {
-//            if (it.snippetId == snippetId) {
-//                return it.role == "Owner"
-//            }
-//        }
+        userSnippetsRepository.findByUserId(user.id!!).forEach {
+            if (it.snippetId == snippetId) {
+                return it.role == "Owner"
+            }
+        }
         return true
     }
 
