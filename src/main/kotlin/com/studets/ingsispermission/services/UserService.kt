@@ -19,6 +19,10 @@ class UserService(
         return user
     }
 
+    fun getById(id: Long): User {
+        return userRepository.findById(id).orElseThrow { UserNotFoundException("User not found when trying to get by id") }
+    }
+
     fun getByAuthId(auth0Id: String): User? {
         return userRepository.findByAuth0Id(auth0Id)
             ?: throw UserNotFoundException("User not found when trying to get by auth0Id")

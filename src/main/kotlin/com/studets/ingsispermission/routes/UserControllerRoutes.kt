@@ -22,6 +22,11 @@ interface UserControllerRoutes {
     @PostMapping
     fun create(@RequestHeader token: String, @RequestBody createUser: CreateUser): ResponseEntity<User>
 
+    /** This method is used to get a user by its id */
+
+    @GetMapping("/{id}")
+    fun getUserById(@PathVariable id: Long): ResponseEntity<UserDTO>
+
     /** This method is used to get a user by email */
     @GetMapping("/{email}")
     fun getUserByEmail(@PathVariable email: String): ResponseEntity<User>

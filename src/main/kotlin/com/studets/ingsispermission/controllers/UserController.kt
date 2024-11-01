@@ -52,6 +52,12 @@ class UserController(
         }
     }
 
+    @GetMapping("/{id}")
+    override fun getUserById(@PathVariable id: Long): ResponseEntity<UserDTO> {
+        val user = userService.getById(id)
+        return ResponseEntity.ok(UserDTO(user))
+    }
+
     @GetMapping("/")
     override fun getAllUsers(): ResponseEntity<List<UserDTO>> {
         val users = userService.getAllUsers()
