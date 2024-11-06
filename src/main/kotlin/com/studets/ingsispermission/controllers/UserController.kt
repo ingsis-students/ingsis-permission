@@ -1,7 +1,6 @@
 package com.studets.ingsispermission.controllers
 
 import com.studets.ingsispermission.entities.CreateUser
-import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.dtos.UserDTO
 import com.studets.ingsispermission.entities.request_types.CheckRequest
@@ -102,9 +101,9 @@ class UserController(
     }
 
     @GetMapping("/snippets/{id}")
-    override fun getUserSnippets(@PathVariable id: Long): ResponseEntity<List<Snippet>> {
+    override fun getUserSnippetsId(@PathVariable id: Long): ResponseEntity<List<Long>> {
         println("hitted the snippets/id endpoint")
-        return userService.getSnippets(id)
+        return userService.getSnippetsId(id)
     }
 
     @GetMapping("/{email}") // once implemented auth0, this would be auth0Id.

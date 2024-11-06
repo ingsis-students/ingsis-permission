@@ -84,9 +84,9 @@ class UserService(
         return true
     }
 
-    fun getSnippets(id: Long): ResponseEntity<List<Snippet>> {
+    fun getSnippetsId(id: Long): ResponseEntity<List<Long>> {
         val user = userRepository.findById(id).orElseThrow { UserNotFoundException("User not found when trying to get snippets") }
-        val snippets = userSnippetsRepository.findByUserId(user.id!!)
-        return ResponseEntity.ok(snippets)
+        val snippetsId = userSnippetsRepository.findByUserId(user.id!!).map { it.id }
+        return ResponseEntity.ok(snippetsId)
     }
 }
