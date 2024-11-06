@@ -92,8 +92,9 @@ class UserController(
         }
     }
 
-    @GetMapping("/snippets")
-    override fun getUserSnippets(id: Long): ResponseEntity<List<Snippet>> {
+    @GetMapping("/snippets/{id}")
+    override fun getUserSnippets(@PathVariable id: Long): ResponseEntity<List<Snippet>> {
+        println("hitted the snippets/id endpoint")
         return userService.getSnippets(id)
     }
 
