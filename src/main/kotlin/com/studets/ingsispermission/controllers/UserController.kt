@@ -1,7 +1,6 @@
 package com.studets.ingsispermission.controllers
 
 import com.studets.ingsispermission.entities.CreateUser
-import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.dtos.UserDTO
 import com.studets.ingsispermission.entities.request_types.CheckRequest
@@ -46,8 +45,8 @@ class UserController(
             ResponseEntity.status(HttpStatus.CONFLICT).body(existingUser)
         } else {
             val newUser = userService.createUser(createUser.email, auth0Id)
-            // snippetService.postDefaultLintRules(newUser.id!!) FIXME for now to begin with skeleton
-            // snippetService.postDefaultFormatRules(newUser.id) FIXME habría que cambiar el localhost para que apunte a la ip del servicio de snippets
+            // snippetService.postDefaultLintRules(newUser.id!!)
+            // snippetService.postDefaultFormatRules(newUser.id) //FIXME habría que cambiar el localhost para que apunte a la ip del servicio de snippets
             ResponseEntity.ok(newUser)
         }
     }
@@ -101,9 +100,10 @@ class UserController(
         }
     }
 
-    @GetMapping("/snippets")
-    override fun getUserSnippets(id: Long): ResponseEntity<List<Snippet>> {
-        return userService.getSnippets(id)
+    @GetMapping("/snippets/{id}")
+    override fun getUserSnippetsId(@PathVariable id: Long): ResponseEntity<List<Long>> {
+        println("hitted the snippets/id endpoint")
+        return userService.getSnippetsId(id)
     }
 
     @GetMapping("/{email}") // once implemented auth0, this would be auth0Id.
