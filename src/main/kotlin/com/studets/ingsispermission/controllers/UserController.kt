@@ -79,12 +79,7 @@ class UserController(
 
     @PostMapping("/check-owner")
     override fun checkIfOwner(@RequestBody checkRequest: CheckRequest): ResponseEntity<String> {
-        println("ARRIVES TO PERMISSION")
-        return if (userService.checkIfOwner(checkRequest.snippetId, checkRequest.email)) {
-            ResponseEntity.ok("User is the owner of the snippet")
-        } else {
-            ResponseEntity.badRequest().body("User is not the owner of the snippet")
-        }
+        return userService.checkIfOwner(checkRequest.snippetId, checkRequest.email)
     }
 
     @GetMapping("/validate")
