@@ -3,6 +3,7 @@ package com.studets.ingsispermission.controllers
 import com.studets.ingsispermission.entities.CreateUser
 import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.entities.dtos.UserDTO
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.errors.UserNotFoundException
@@ -51,9 +52,17 @@ class UserController(
         }
     }
 
+    @GetMapping("/get/{id}")
+    override fun getUserById(@PathVariable id: Long): ResponseEntity<UserDTO> {
+        val user = userService.getById(id)
+        return ResponseEntity.ok(UserDTO(user))
+    }
+
     @GetMapping("/")
-    override fun getAllUsers(): ResponseEntity<List<User>> {
-        return ResponseEntity.ok(userService.getAllUsers())
+    override fun getAllUsers(): ResponseEntity<List<UserDTO>> {
+        val users = userService.getAllUsers()
+        val usersDTO = users.map { user -> UserDTO(user) }
+        return ResponseEntity.ok(usersDTO)
     }
 
     @PutMapping("/{email}")
@@ -88,7 +97,7 @@ class UserController(
         return if (user != null) {
             ResponseEntity.ok(user.id)
         } else {
-            ResponseEntity.status(HttpStatus.NOT_FOUND).build() // no body.
+            ResponseEntity.status(HttpStatus.NOT_FOUND).build()
         }
     }
 

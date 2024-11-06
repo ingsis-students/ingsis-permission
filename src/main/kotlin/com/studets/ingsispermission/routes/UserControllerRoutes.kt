@@ -3,6 +3,7 @@ package com.studets.ingsispermission.routes
 import com.studets.ingsispermission.entities.CreateUser
 import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.entities.dtos.UserDTO
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import org.springframework.http.ResponseEntity
@@ -21,13 +22,18 @@ interface UserControllerRoutes {
     @PostMapping
     fun create(@RequestHeader token: String, @RequestBody createUser: CreateUser): ResponseEntity<User>
 
+    /** This method is used to get a user by its id */
+
+    @GetMapping("/{id}")
+    fun getUserById(@PathVariable id: Long): ResponseEntity<UserDTO>
+
     /** This method is used to get a user by email */
     @GetMapping("/{email}")
     fun getUserByEmail(@PathVariable email: String): ResponseEntity<User>
 
     /** This method is used to get all users */
     @GetMapping
-    fun getAllUsers(): ResponseEntity<List<User>>
+    fun getAllUsers(): ResponseEntity<List<UserDTO>>
 
     /** This method is used to update a user */
     @PutMapping("/{email}")
