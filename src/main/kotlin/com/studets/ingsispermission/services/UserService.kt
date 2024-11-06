@@ -73,6 +73,7 @@ class UserService(
     }
 
     fun checkIfOwner(snippetId: Long, email: String): Boolean {
+        println("USER EMAIL HERE $email")
         val user = userRepository.findByEmail(email)
             ?: throw UserNotFoundException("User not found when trying to check if it is the owner of a snippet")
 
