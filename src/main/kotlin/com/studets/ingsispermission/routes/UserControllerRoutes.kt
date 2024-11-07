@@ -3,6 +3,7 @@ package com.studets.ingsispermission.routes
 import com.studets.ingsispermission.entities.CreateUser
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.dtos.UserDTO
+import com.studets.ingsispermission.entities.dtos.UserSnippetDto
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import org.springframework.http.ResponseEntity
@@ -36,7 +37,7 @@ interface UserControllerRoutes {
 
     /** This method is used to get the snippets of a user */
     @GetMapping("/get-user-snippets")
-    fun getUserSnippets(@RequestBody email: String): ResponseEntity<List<Long>>
+    fun getUserSnippets(@RequestBody email: String): ResponseEntity<List<UserSnippetDto>>
 
     /** This method is used to update a user */
     @PutMapping("/{email}")

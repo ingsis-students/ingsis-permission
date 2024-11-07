@@ -3,6 +3,7 @@ package com.studets.ingsispermission.controllers
 import com.studets.ingsispermission.entities.CreateUser
 import com.studets.ingsispermission.entities.User
 import com.studets.ingsispermission.entities.dtos.UserDTO
+import com.studets.ingsispermission.entities.dtos.UserSnippetDto
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.errors.UserNotFoundException
@@ -70,7 +71,7 @@ class UserController(
     }
 
     @GetMapping("/get-user-snippets")
-    override fun getUserSnippets(@RequestBody email: String): ResponseEntity<List<Long>> {
+    override fun getUserSnippets(@RequestBody email: String): ResponseEntity<List<UserSnippetDto>> {
         val snippets = userService.getSnippetsOfUser(email)
         return ResponseEntity.ok(snippets)
     }

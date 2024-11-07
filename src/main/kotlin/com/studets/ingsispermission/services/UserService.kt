@@ -2,6 +2,7 @@ package com.studets.ingsispermission.services
 
 import com.studets.ingsispermission.entities.Snippet
 import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.entities.dtos.UserSnippetDto
 import com.studets.ingsispermission.errors.UserNotFoundException
 import com.studets.ingsispermission.repositories.UserRepository
 import com.studets.ingsispermission.repositories.UserSnippetsRepository
@@ -33,9 +34,9 @@ class UserService(
         return userRepository.save(user)
     }
 
-    fun getSnippetsOfUser(email: String): List<Long> {
+    fun getSnippetsOfUser(email: String): List<UserSnippetDto> {
         val user = getByEmail(email) ?: throw UserNotFoundException("User not found when trying to get snippets of it")
-        return userSnippetsRepository.findByUserId(user.id!!).map { it.snippetId }
+        return userSnippetsRepository.findByUserId(user.id!!).map { UserSnippetDto(it.snippetId, it.role) }
     }
 
     fun getAllUsers(): List<User> {
