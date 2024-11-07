@@ -58,6 +58,12 @@ class UserController(
         return ResponseEntity.ok(UserDTO(user))
     }
 
+    @GetMapping("/auth0/{auth0Id}")
+    override fun getUserByAuth0Id(@PathVariable auth0Id: String): ResponseEntity<UserDTO> {
+        val user = userService.getByAuthId(auth0Id)
+        return ResponseEntity.ok(UserDTO(user!!))
+    }
+
     @GetMapping("/")
     override fun getAllUsers(): ResponseEntity<List<UserDTO>> {
         val users = userService.getAllUsers()
@@ -71,8 +77,8 @@ class UserController(
     }
 
     @PostMapping("/get-user-snippets")
-    override fun getUserSnippets(@RequestBody email: String): ResponseEntity<List<UserSnippetDto>> {
-        val snippets = userService.getSnippetsOfUser(email)
+    override fun getUserSnippets(@RequestBody userId: String): ResponseEntity<List<UserSnippetDto>> {
+        val snippets = userService.getSnippetsOfUser(userId)
         println("SNIPPETS HERE $snippets")
         return ResponseEntity.ok(snippets)
     }

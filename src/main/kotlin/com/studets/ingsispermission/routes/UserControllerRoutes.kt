@@ -26,6 +26,9 @@ interface UserControllerRoutes {
 
     @GetMapping("/{id}")
     fun getUserById(@PathVariable id: Long): ResponseEntity<UserDTO>
+    /** This method is used to get a user by his auth0Id */
+    @GetMapping("/auth0/{auth0Id}")
+    fun getUserByAuth0Id(@PathVariable auth0Id: String): ResponseEntity<UserDTO>
 
     /** This method is used to get a user by email */
     @GetMapping("/{email}")
