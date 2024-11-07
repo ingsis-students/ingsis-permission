@@ -70,7 +70,7 @@ class UserController(
         return ResponseEntity.ok(userService.updateUser(user))
     }
 
-    @GetMapping("/get-user-snippets")
+    @PostMapping("/get-user-snippets")
     override fun getUserSnippets(@RequestBody email: String): ResponseEntity<List<UserSnippetDto>> {
         val snippets = userService.getSnippetsOfUser(email)
         return ResponseEntity.ok(snippets)
