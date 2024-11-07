@@ -69,6 +69,12 @@ class UserController(
         return ResponseEntity.ok(userService.updateUser(user))
     }
 
+    @GetMapping("/get-user-snippets")
+    override fun getUserSnippets(@RequestBody email: String): ResponseEntity<List<Long>> {
+        val snippets = userService.getSnippetsOfUser(email)
+        return ResponseEntity.ok(snippets)
+    }
+
     @PostMapping("/add-snippet/{email}")
     override fun addSnippetToUser(
         @PathVariable email: String,

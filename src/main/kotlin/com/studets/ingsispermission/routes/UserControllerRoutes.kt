@@ -34,6 +34,10 @@ interface UserControllerRoutes {
     @GetMapping
     fun getAllUsers(): ResponseEntity<List<UserDTO>>
 
+    /** This method is used to get the snippets of a user */
+    @GetMapping("/get-user-snippets")
+    fun getUserSnippets(@RequestBody email: String): ResponseEntity<List<Long>>
+
     /** This method is used to update a user */
     @PutMapping("/{email}")
     fun updateUser(@RequestBody user: User): ResponseEntity<User>

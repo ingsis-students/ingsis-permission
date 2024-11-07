@@ -33,6 +33,11 @@ class UserService(
         return userRepository.save(user)
     }
 
+    fun getSnippetsOfUser(email: String): List<Long> {
+        val user = getByEmail(email) ?: throw UserNotFoundException("User not found when trying to get snippets of it")
+        return userSnippetsRepository.findByUserId(user.id!!).map { it.snippetId }
+    }
+
     fun getAllUsers(): List<User> {
         return userRepository.findAll()
     }
