@@ -35,7 +35,9 @@ class UserService(
     }
 
     fun getSnippetsOfUser(email: String): List<UserSnippetDto> {
+        println("HAVE EMAIL $email")
         val user = getByEmail(email) ?: throw UserNotFoundException("User not found when trying to get snippets of it")
+        println("USER ID HERE ${user.id}")
         return userSnippetsRepository.findByUserId(user.id!!).map { UserSnippetDto(it.snippetId, it.role) }
     }
 
