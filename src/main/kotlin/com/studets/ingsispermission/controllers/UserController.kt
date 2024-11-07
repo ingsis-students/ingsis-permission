@@ -1,7 +1,7 @@
 package com.studets.ingsispermission.controllers
 
 import com.studets.ingsispermission.entities.CreateUser
-import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.entities.Author
 import com.studets.ingsispermission.entities.dtos.UserDTO
 import com.studets.ingsispermission.entities.dtos.UserSnippetDto
 import com.studets.ingsispermission.entities.request_types.CheckRequest
@@ -34,7 +34,7 @@ class UserController(
     override fun create(
         @RequestHeader("Authorization") token: String,
         @RequestBody createUser: CreateUser
-    ): ResponseEntity<User> {
+    ): ResponseEntity<Author> {
         val auth0Id = jwtDecoder.decode(token.removePrefix("Bearer ")).claims["sub"] as String
 
         val existingUser = try {
@@ -66,8 +66,8 @@ class UserController(
     }
 
     @PutMapping("/{email}")
-    override fun updateUser(@RequestBody user: User): ResponseEntity<User> {
-        return ResponseEntity.ok(userService.updateUser(user))
+    override fun updateUser(@RequestBody author: Author): ResponseEntity<Author> {
+        return ResponseEntity.ok(userService.updateUser(author))
     }
 
     @PostMapping("/get-user-snippets")
@@ -111,7 +111,7 @@ class UserController(
     }
 
     @GetMapping("/{email}") // once implemented auth0, this would be auth0Id.
-    override fun getUserByEmail(@PathVariable email: String): ResponseEntity<User> {
+    override fun getUserByEmail(@PathVariable email: String): ResponseEntity<Author> {
         return ResponseEntity.ok(userService.getByEmail(email)!!)
     }
 }

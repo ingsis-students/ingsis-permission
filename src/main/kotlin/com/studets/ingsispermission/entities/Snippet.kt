@@ -16,7 +16,7 @@ data class Snippet(
     val id: Long = 0,
 
     @ManyToOne
-    val user: User,
+    val author: Author,
 
     @Column(nullable = false)
     val snippetId: Long,
@@ -24,9 +24,9 @@ data class Snippet(
     @Column(nullable = false)
     val role: String
 ) {
-    constructor() : this(0, User(), 0, "nonexistent")
+    constructor() : this(0, Author(), 0, "nonexistent")
 
     override fun toString(): String {
-        return "Snippet(snippetId=$snippetId, user=${user.email}, role='$role')"
+        return "Snippet(snippetId=$snippetId, user=${author.email}, role='$role')"
     }
 }

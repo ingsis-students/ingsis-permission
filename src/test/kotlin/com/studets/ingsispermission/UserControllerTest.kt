@@ -2,7 +2,7 @@ package com.studets.ingsispermission
 
 import com.studets.ingsispermission.controllers.UserController
 import com.studets.ingsispermission.entities.Snippet
-import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.entities.Author
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.repositories.UserRepository
@@ -45,16 +45,16 @@ class UserControllerTest {
     @BeforeEach
     fun setup() {
         val users = UserFixture.all()
-        val user = User(id = 1, email = "mati@example.com", auth0Id = "auth0-123", snippets = emptyList())
+        val author = Author(id = 1, email = "mati@example.com", auth0Id = "auth0-123", snippets = emptyList())
         userRepository.saveAll(users)
 
         whenever(userRepository.findById(1)).thenAnswer { Optional.of(UserFixture.MATI_CHIALVA) }
-        whenever(userRepository.findByEmail("mati@example.com")).thenAnswer { user }
+        whenever(userRepository.findByEmail("mati@example.com")).thenAnswer { author }
         whenever(userRepository.findByAuth0Id("auth0-122")).thenAnswer { UserFixture.MATI_CHIALVA }
-        whenever(userRepository.save(any<User>())).thenAnswer { UserFixture.MATI_CHIALVA }
+        whenever(userRepository.save(any<Author>())).thenAnswer { UserFixture.MATI_CHIALVA }
         whenever(userRepository.findAll()).thenAnswer { users }
-        whenever(userSnippetsRepository.findByUserId(anyLong())).thenAnswer {
-            listOf(Snippet(id = 1, user = user, snippetId = 2, role = "Owner"))
+        whenever(userSnippetsRepository.findByAuthorId(anyLong())).thenAnswer {
+            listOf(Snippet(id = 1, author = author, snippetId = 2, role = "Owner"))
         }
         whenever(snippetService.postDefaultLintRules(anyLong())).thenReturn(ResponseEntity("Default lint rules applied", HttpStatus.OK))
         whenever(snippetService.postDefaultFormatRules(anyLong())).thenReturn(ResponseEntity("Default lint rules applied", HttpStatus.OK))
@@ -101,8 +101,8 @@ class UserControllerTest {
     @Test
     @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `can update user`() {
-        val user = User(id = 1, email = "mati@gmail.com", auth0Id = "auth0-123")
-        val response = userController.updateUser(user)
+        val author = Author(id = 1, email = "mati@gmail.com", auth0Id = "auth0-123")
+        val response = userController.updateUser(author)
         assertTrue(response.body?.email == "mati@gmail.com")
     }
 

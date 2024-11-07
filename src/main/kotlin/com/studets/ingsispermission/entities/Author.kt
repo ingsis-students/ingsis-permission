@@ -9,8 +9,8 @@ import jakarta.persistence.Column
 import jakarta.persistence.OneToMany
 
 @Entity
-@Table(name = "users")
-data class User(
+@Table(name = "author")
+data class Author(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
@@ -20,7 +20,7 @@ data class User(
     @Column(nullable = true, unique = true)
     val auth0Id: String,
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "author")
     val snippets: List<Snippet> = emptyList()
 
 ) {

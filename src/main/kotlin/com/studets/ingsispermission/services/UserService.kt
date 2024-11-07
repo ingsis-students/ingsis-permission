@@ -1,7 +1,7 @@
 package com.studets.ingsispermission.services
 
 import com.studets.ingsispermission.entities.Snippet
-import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.entities.Author
 import com.studets.ingsispermission.entities.dtos.UserSnippetDto
 import com.studets.ingsispermission.errors.UserNotFoundException
 import com.studets.ingsispermission.repositories.UserRepository
@@ -14,7 +14,7 @@ class UserService(
     private val userRepository: UserRepository,
     private val userSnippetsRepository: UserSnippetsRepository
 ) {
-    fun getByEmail(email: String): User? {
+    fun getByEmail(email: String): Author? {
         val user = userRepository.findByEmail(email)
         println("USER: $user")
         if (user == null) {
@@ -23,45 +23,45 @@ class UserService(
         return user
     }
 
-    fun getById(id: Long): User {
+    fun getById(id: Long): Author {
         return userRepository.findById(id)
             .orElseThrow { UserNotFoundException("User not found when trying to get by id") }
     }
 
-    fun getByAuthId(auth0Id: String): User? {
+    fun getByAuthId(auth0Id: String): Author? {
         return userRepository.findByAuth0Id(auth0Id)
             ?: throw UserNotFoundException("User not found when trying to get by auth0Id")
     }
 
-    fun createUser(email: String, auth0Id: String): User {
-        val user = User(email = email, auth0Id = auth0Id)
-        return userRepository.save(user)
+    fun createUser(email: String, auth0Id: String): Author {
+        val author = Author(email = email, auth0Id = auth0Id)
+        return userRepository.save(author)
     }
 
     fun getSnippetsOfUser(email: String): List<UserSnippetDto> {
         println("HAVE EMAIL $email")
         val user = getByEmail(email)
         println("USER ID HERE ${user!!.id}")
-        return userSnippetsRepository.findByUserId(user.id!!).map { UserSnippetDto(it.snippetId, it.role) }
+        return userSnippetsRepository.findByAuthorId(user.id!!).map { UserSnippetDto(it.snippetId, it.role) }
     }
 
-    fun getAllUsers(): List<User> {
-        return userRepository.findAll()
+    fun getAllUsers(): List<Author> {
+        return userRepository.findAll().toList()
     }
 
-    fun updateUser(user: User): User? {
-        val userOptional = userRepository.findById(user.id!!)
+    fun updateUser(author: Author): Author? {
+        val userOptional = userRepository.findById(author.id!!)
         if (userOptional.isEmpty) {
             throw UserNotFoundException("User not found when trying to update it")
         }
-        val updatedUser = userOptional.get().copy(email = user.email, auth0Id = user.auth0Id)
+        val updatedUser = userOptional.get().copy(email = author.email, auth0Id = author.auth0Id)
         userRepository.save(updatedUser)
         return updatedUser
     }
 
     fun addSnippetToUser(email: String, snippetId: Long, role: String): ResponseEntity<String> {
         val user = getByEmail(email) ?: throw UserNotFoundException("User not found when trying to add a snippet to it")
-        val snippets = Snippet(user = user, snippetId = snippetId, role = role)
+        val snippets = Snippet(author = user, snippetId = snippetId, role = role)
 
         if (userSnippetRelationExists(user, snippetId)) {
             return ResponseEntity.ok("User already has this snippet.")
@@ -75,8 +75,8 @@ class UserService(
         }
     }
 
-    private fun userSnippetRelationExists(user: User, snippetId: Long): Boolean {
-        userSnippetsRepository.findByUserId(user.id!!).forEach {
+    private fun userSnippetRelationExists(author: Author, snippetId: Long): Boolean {
+        userSnippetsRepository.findByAuthorId(author.id!!).forEach {
             if (it.snippetId == snippetId) {
                 return true
             }
@@ -89,7 +89,7 @@ class UserService(
         val user = userRepository.findByEmail(email)
             ?: throw UserNotFoundException("User not found when trying to check if it is the owner of a snippet")
 
-        userSnippetsRepository.findByUserId(user.id!!).forEach {
+        userSnippetsRepository.findByAuthorId(user.id!!).forEach {
             if (it.snippetId == snippetId) {
                 return if (it.role == "Owner") {
                     ResponseEntity.ok("User is the owner of the snippet")
@@ -104,7 +104,7 @@ class UserService(
     fun getSnippetsId(id: Long): ResponseEntity<List<Long>> {
         val user = userRepository.findById(id)
             .orElseThrow { UserNotFoundException("User not found when trying to get snippets") }
-        val snippetsId = userSnippetsRepository.findByUserId(user.id!!).map { it.id }
+        val snippetsId = userSnippetsRepository.findByAuthorId(user.id!!).map { it.id }
         return ResponseEntity.ok(snippetsId)
     }
 }
