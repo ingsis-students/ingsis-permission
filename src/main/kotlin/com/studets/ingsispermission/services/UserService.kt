@@ -16,12 +16,16 @@ class UserService(
 ) {
     fun getByEmail(email: String): User? {
         val user = userRepository.findByEmail(email)
-            ?: throw UserNotFoundException("User not found when trying to get by email")
+        println("USER: $user")
+        if (user == null) {
+            throw UserNotFoundException("User not found when trying to get by email")
+        }
         return user
     }
 
     fun getById(id: Long): User {
-        return userRepository.findById(id).orElseThrow { UserNotFoundException("User not found when trying to get by id") }
+        return userRepository.findById(id)
+            .orElseThrow { UserNotFoundException("User not found when trying to get by id") }
     }
 
     fun getByAuthId(auth0Id: String): User? {
@@ -36,8 +40,8 @@ class UserService(
 
     fun getSnippetsOfUser(email: String): List<UserSnippetDto> {
         println("HAVE EMAIL $email")
-        val user = getByEmail(email) ?: throw UserNotFoundException("User not found when trying to get snippets of it")
-        println("USER ID HERE ${user.id}")
+        val user = getByEmail(email)
+        println("USER ID HERE ${user!!.id}")
         return userSnippetsRepository.findByUserId(user.id!!).map { UserSnippetDto(it.snippetId, it.role) }
     }
 
@@ -82,7 +86,8 @@ class UserService(
 
     fun checkIfOwner(snippetId: Long, email: String): ResponseEntity<String> {
         println("USER EMAIL HERE $email")
-        val user = userRepository.findByEmail(email) ?: throw UserNotFoundException("User not found when trying to check if it is the owner of a snippet")
+        val user = userRepository.findByEmail(email)
+            ?: throw UserNotFoundException("User not found when trying to check if it is the owner of a snippet")
 
         userSnippetsRepository.findByUserId(user.id!!).forEach {
             if (it.snippetId == snippetId) {
@@ -97,7 +102,8 @@ class UserService(
     }
 
     fun getSnippetsId(id: Long): ResponseEntity<List<Long>> {
-        val user = userRepository.findById(id).orElseThrow { UserNotFoundException("User not found when trying to get snippets") }
+        val user = userRepository.findById(id)
+            .orElseThrow { UserNotFoundException("User not found when trying to get snippets") }
         val snippetsId = userSnippetsRepository.findByUserId(user.id!!).map { it.id }
         return ResponseEntity.ok(snippetsId)
     }
