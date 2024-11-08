@@ -39,7 +39,7 @@ class CorrelationIdFilter : Filter {
     }
 
     companion object {
-        const val CORRELATION_ID_KEY: String = "correlation-id"
+        const val CORRELATION_ID_KEY: String = "context.correlation-id"
         const val CORRELATION_ID_HEADER: String = "X-Correlation-Id"
     }
 }
