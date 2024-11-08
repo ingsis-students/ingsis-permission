@@ -40,7 +40,7 @@ class UserService(
             println("USER HERE $user")
             return userSnippetsRepository.findByAuthorId(user?.id!!).map { UserSnippetDto(it.snippetId, it.role) }
         } catch (e: Exception) {
-            throw UserNotFoundException("User not found when trying to get snippets of it")
+            throw UserNotFoundException("User not found when trying to get snippets")
         }
     }
 
