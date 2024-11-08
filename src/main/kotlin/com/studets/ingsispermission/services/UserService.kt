@@ -16,21 +16,16 @@ class UserService(
 ) {
     fun getByEmail(email: String): Author? {
         val user = userRepository.findByEmail(email)
-        println("USER: $user")
-        if (user == null) {
-            throw UserNotFoundException("User not found when trying to get by email")
-        }
+            ?: throw UserNotFoundException("User not found when trying to get by email")
         return user
     }
 
     fun getById(id: Long): Author {
-        return userRepository.findById(id)
-            .orElseThrow { UserNotFoundException("User not found when trying to get by id") }
+        return userRepository.findById(id).orElseThrow { UserNotFoundException("User not found when trying to get by id") }
     }
 
     fun getByAuthId(auth0Id: String): Author? {
-        return userRepository.findByAuth0Id(auth0Id)
-            ?: throw UserNotFoundException("User not found when trying to get by auth0Id")
+        return userRepository.findByAuth0Id(auth0Id) ?: throw UserNotFoundException("User not found when trying to get by auth0Id")
     }
 
     fun createUser(email: String, auth0Id: String): Author {
@@ -38,11 +33,15 @@ class UserService(
         return userRepository.save(author)
     }
 
-    fun getSnippetsOfUser(email: String): List<UserSnippetDto> {
-        println("HAVE EMAIL $email")
-        val user = getByEmail(email)
-        println("USER ID HERE ${user!!.id}")
-        return userSnippetsRepository.findByAuthorId(user.id!!).map { UserSnippetDto(it.snippetId, it.role) }
+    fun getSnippetsOfUser(id: String): List<UserSnippetDto> {
+        println("HAVE ID $id")
+        try {
+            val user = getByAuthId(id)
+            println("USER HERE $user")
+            return userSnippetsRepository.findByAuthorId(user?.id!!).map { UserSnippetDto(it.snippetId, it.role) }
+        } catch (e: Exception) {
+            throw UserNotFoundException("User not found when trying to get snippets")
+        }
     }
 
     fun getAllUsers(): List<Author> {
