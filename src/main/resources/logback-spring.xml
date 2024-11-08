@@ -2,7 +2,7 @@
     <springProfile name="!production">
         <appender name="console-appender" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - correlation.id=%X{correlation-id:-none} - %msg%n</pattern>
+                <pattern>%highlight(%level) %cyan(%logger{32}) [correlation-id=%X{correlation-id:-none}] : %msg %n</pattern>
             </encoder>
         </appender>
     </springProfile>
@@ -10,7 +10,7 @@
     <springProfile name="production">
         <appender name="console-appender" class="ch.qos.logback.core.ConsoleAppender">
             <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - correlation.id=%X{correlation-id:-none} - %msg%n</pattern>
+                <pattern>%highlight(%level) %cyan(%logger{32}) [correlation-id=%X{correlation-id:-none}] : %msg %n</pattern>
             </encoder>
         </appender>
     </springProfile>
