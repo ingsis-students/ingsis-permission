@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler
 class ExceptionHandler {
     @ExceptionHandler(UserNotFoundException::class)
     fun handle(ex: UserNotFoundException): ResponseEntity<Any> {
-        return ResponseEntity.notFound().build()
+        return ResponseEntity.badRequest().body(ex.message)
     }
 }

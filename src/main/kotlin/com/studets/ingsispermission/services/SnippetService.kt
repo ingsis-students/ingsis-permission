@@ -20,7 +20,7 @@ class SnippetService(private val restTemplate: RestTemplate) {
         val body: Map<String, Any> = mapOf("userId" to userId)
         val entity = HttpEntity(body, getJsonHeaders())
         return restTemplate.postForEntity(
-            "http://localhost:8083/api/lint/rules/default",
+            "http://localhost:8082/api/lint/rules/default",
             entity,
             String::class.java
         )
@@ -30,7 +30,7 @@ class SnippetService(private val restTemplate: RestTemplate) {
         val body: Map<String, Any> = mapOf("userId" to userId)
         val entity = HttpEntity(body, getJsonHeaders())
         return restTemplate.postForEntity(
-            "http://localhost:8083/api/format/rules/default",
+            "http://localhost:8082/api/format/rules/default",
             entity,
             String::class.java
         )

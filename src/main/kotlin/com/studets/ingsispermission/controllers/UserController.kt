@@ -1,9 +1,9 @@
 package com.studets.ingsispermission.controllers
 
 import com.studets.ingsispermission.entities.CreateUser
-import com.studets.ingsispermission.entities.Snippet
-import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.entities.Author
 import com.studets.ingsispermission.entities.dtos.UserDTO
+import com.studets.ingsispermission.entities.dtos.UserSnippetDto
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.errors.UserNotFoundException
@@ -34,7 +34,7 @@ class UserController(
     override fun create(
         @RequestHeader("Authorization") token: String,
         @RequestBody createUser: CreateUser
-    ): ResponseEntity<User> {
+    ): ResponseEntity<Author> {
         val auth0Id = jwtDecoder.decode(token.removePrefix("Bearer ")).claims["sub"] as String
 
         val existingUser = try {
@@ -46,8 +46,8 @@ class UserController(
             ResponseEntity.status(HttpStatus.CONFLICT).body(existingUser)
         } else {
             val newUser = userService.createUser(createUser.email, auth0Id)
-            // snippetService.postDefaultLintRules(newUser.id!!) FIXME for now to begin with skeleton
-            // snippetService.postDefaultFormatRules(newUser.id) FIXME habría que cambiar el localhost para que apunte a la ip del servicio de snippets
+            // snippetService.postDefaultLintRules(newUser.id!!)
+            // snippetService.postDefaultFormatRules(newUser.id) //FIXME habría que cambiar el localhost para que apunte a la ip del servicio de snippets
             ResponseEntity.ok(newUser)
         }
     }
@@ -58,6 +58,12 @@ class UserController(
         return ResponseEntity.ok(UserDTO(user))
     }
 
+    @GetMapping("/auth0/{auth0Id}")
+    override fun getUserByAuth0Id(@PathVariable auth0Id: String): ResponseEntity<UserDTO> {
+        val user = userService.getByAuthId(auth0Id)
+        return ResponseEntity.ok(UserDTO(user!!))
+    }
+
     @GetMapping("/")
     override fun getAllUsers(): ResponseEntity<List<UserDTO>> {
         val users = userService.getAllUsers()
@@ -66,8 +72,15 @@ class UserController(
     }
 
     @PutMapping("/{email}")
-    override fun updateUser(@RequestBody user: User): ResponseEntity<User> {
-        return ResponseEntity.ok(userService.updateUser(user))
+    override fun updateUser(@RequestBody author: Author): ResponseEntity<Author> {
+        return ResponseEntity.ok(userService.updateUser(author))
+    }
+
+    @GetMapping("/get-user-snippets/{userId}")
+    override fun getUserSnippets(@PathVariable userId: String): ResponseEntity<List<UserSnippetDto>> {
+        val snippets = userService.getSnippetsOfUser(userId)
+        println("SNIPPETS HERE $snippets")
+        return ResponseEntity.ok(snippets)
     }
 
     @PostMapping("/add-snippet/{email}")
@@ -80,11 +93,7 @@ class UserController(
 
     @PostMapping("/check-owner")
     override fun checkIfOwner(@RequestBody checkRequest: CheckRequest): ResponseEntity<String> {
-        return if (userService.checkIfOwner(checkRequest.snippetId, checkRequest.email)) {
-            ResponseEntity.ok("User is the owner of the snippet")
-        } else {
-            ResponseEntity.badRequest().body("User is not the owner of the snippet")
-        }
+        return userService.checkIfOwner(checkRequest.snippetId, checkRequest.email)
     }
 
     @GetMapping("/validate")
@@ -101,13 +110,14 @@ class UserController(
         }
     }
 
-    @GetMapping("/snippets")
-    override fun getUserSnippets(id: Long): ResponseEntity<List<Snippet>> {
-        return userService.getSnippets(id)
+    @GetMapping("/snippets/{id}")
+    override fun getUserSnippetsId(@PathVariable id: Long): ResponseEntity<List<Long>> {
+        println("hitted the snippets/id endpoint")
+        return userService.getSnippetsId(id)
     }
 
     @GetMapping("/{email}") // once implemented auth0, this would be auth0Id.
-    override fun getUserByEmail(@PathVariable email: String): ResponseEntity<User> {
+    override fun getUserByEmail(@PathVariable email: String): ResponseEntity<Author> {
         return ResponseEntity.ok(userService.getByEmail(email)!!)
     }
 }

@@ -1,9 +1,9 @@
 package com.studets.ingsispermission.routes
 
 import com.studets.ingsispermission.entities.CreateUser
-import com.studets.ingsispermission.entities.Snippet
-import com.studets.ingsispermission.entities.User
+import com.studets.ingsispermission.entities.Author
 import com.studets.ingsispermission.entities.dtos.UserDTO
+import com.studets.ingsispermission.entities.dtos.UserSnippetDto
 import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import org.springframework.http.ResponseEntity
@@ -20,24 +20,31 @@ interface UserControllerRoutes {
 
     /** This method is used to create a user */
     @PostMapping
-    fun create(@RequestHeader token: String, @RequestBody createUser: CreateUser): ResponseEntity<User>
+    fun create(@RequestHeader token: String, @RequestBody createUser: CreateUser): ResponseEntity<Author>
 
     /** This method is used to get a user by its id */
 
     @GetMapping("/{id}")
     fun getUserById(@PathVariable id: Long): ResponseEntity<UserDTO>
+    /** This method is used to get a user by his auth0Id */
+    @GetMapping("/auth0/{auth0Id}")
+    fun getUserByAuth0Id(@PathVariable auth0Id: String): ResponseEntity<UserDTO>
 
     /** This method is used to get a user by email */
     @GetMapping("/{email}")
-    fun getUserByEmail(@PathVariable email: String): ResponseEntity<User>
+    fun getUserByEmail(@PathVariable email: String): ResponseEntity<Author>
 
     /** This method is used to get all users */
     @GetMapping
     fun getAllUsers(): ResponseEntity<List<UserDTO>>
 
+    /** This method is used to get the snippets of a user */
+    @GetMapping("/get-user-snippets")
+    fun getUserSnippets(@RequestBody email: String): ResponseEntity<List<UserSnippetDto>>
+
     /** This method is used to update a user */
     @PutMapping("/{email}")
-    fun updateUser(@RequestBody user: User): ResponseEntity<User>
+    fun updateUser(@RequestBody author: Author): ResponseEntity<Author>
 
     /** This method is used to add a snippet to a user */
     @PostMapping("/add-snippet/{email}")
@@ -52,5 +59,5 @@ interface UserControllerRoutes {
     fun validate(@AuthenticationPrincipal token: String): ResponseEntity<Long>
 
     @GetMapping("/snippets")
-    fun getUserSnippets(id: Long): ResponseEntity<List<Snippet>>
+    fun getUserSnippetsId(id: Long): ResponseEntity<List<Long>>
 }

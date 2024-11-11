@@ -1,9 +1,12 @@
 package com.studets.ingsispermission.repositories
 
-import com.studets.ingsispermission.entities.User
-import org.springframework.data.jpa.repository.JpaRepository
+import com.studets.ingsispermission.entities.Author
+import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.CrudRepository
+import org.springframework.data.repository.query.Param
 
-interface UserRepository : JpaRepository<User, Long> { // implements jpa basic functionality.
-    fun findByEmail(email: String): User?
-    fun findByAuth0Id(auth0Id: String): User?
+interface UserRepository : CrudRepository<Author, Long> {
+    fun findByEmail(email: String): Author?
+    @Query("SELECT a FROM Author a WHERE a.auth0Id = :auth0Id")
+    fun findByAuth0Id(@Param("auth0Id") auth0Id: String): Author?
 }
