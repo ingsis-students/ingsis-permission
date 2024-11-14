@@ -7,7 +7,6 @@ import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.repositories.UserRepository
 import com.studets.ingsispermission.repositories.UserSnippetsRepository
-import com.studets.ingsispermission.services.SnippetService
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -19,8 +18,6 @@ import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
 import java.util.Optional
@@ -28,7 +25,7 @@ import kotlin.test.assertFailsWith
 
 @SpringBootTest()
 @ActiveProfiles("test")
-class UserControllerTest {
+class UserControllerMockTest {
 
     @Autowired
     private lateinit var userController: UserController
@@ -38,9 +35,6 @@ class UserControllerTest {
 
     @MockBean
     private lateinit var userSnippetsRepository: UserSnippetsRepository
-
-    @MockBean
-    private lateinit var snippetService: SnippetService
 
     @BeforeEach
     fun setup() {
@@ -56,8 +50,6 @@ class UserControllerTest {
         whenever(userSnippetsRepository.findByAuthorId(anyLong())).thenAnswer {
             listOf(Snippet(id = 1, author = author, snippetId = 2, role = "Owner"))
         }
-        whenever(snippetService.postDefaultLintRules(anyLong())).thenReturn(ResponseEntity("Default lint rules applied", HttpStatus.OK))
-        whenever(snippetService.postDefaultFormatRules(anyLong())).thenReturn(ResponseEntity("Default lint rules applied", HttpStatus.OK))
     }
 
     @Test
@@ -78,16 +70,6 @@ class UserControllerTest {
         val user = userRepository.findByAuth0Id("10")
         assertTrue(user == null, "User should be null")
     }
-
-//    @Test
-//    @WithMockUser(authorities = ["SCOPE_read:snippets"]) // mock security
-//    fun `can create user`() {
-//        val token =
-//        val user = CreateUser(email = "nacho@example.com")
-//        val response = userController.create(token, user)
-//
-//        assertNotNull(response.body?.email, "User email should not be null")
-//    }
 
     @Test
     @WithMockUser(authorities = ["SCOPE_read:snippets"])

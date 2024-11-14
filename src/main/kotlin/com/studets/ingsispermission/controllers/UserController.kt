@@ -8,7 +8,6 @@ import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.errors.UserNotFoundException
 import com.studets.ingsispermission.routes.UserControllerRoutes
-import com.studets.ingsispermission.services.SnippetService
 import com.studets.ingsispermission.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController
 class UserController(
     private val userService: UserService,
     private val jwtDecoder: JwtDecoder,
-    private val snippetService: SnippetService
 ) : UserControllerRoutes {
 
     @PostMapping("/")

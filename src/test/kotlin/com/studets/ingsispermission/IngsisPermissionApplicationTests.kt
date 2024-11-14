@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest
+@SpringBootTest // loads spring app -> integration testing
 @ActiveProfiles("test") // use test database - h2
 class IngsisPermissionApplicationTests {
 
