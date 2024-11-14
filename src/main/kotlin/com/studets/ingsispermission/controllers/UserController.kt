@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import javax.security.auth.callback.ConfirmationCallback.OK
 
 @RestController
 @RequestMapping("/api/user")
@@ -43,7 +44,7 @@ class UserController(
             null
         }
         return if (existingUser != null) {
-            ResponseEntity.status(HttpStatus.CONFLICT).body(existingUser)
+            ResponseEntity.status(OK).body(existingUser)
         } else {
             val newUser = userService.createUser(createUser.email, auth0Id)
             // snippetService.postDefaultLintRules(newUser.id!!)
