@@ -44,8 +44,6 @@ class UserController(
             ResponseEntity.status(HttpStatus.CONFLICT).body(existingUser)
         } else {
             val newUser = userService.createUser(createUser.email, auth0Id)
-            // snippetService.postDefaultLintRules(newUser.id!!)
-            // snippetService.postDefaultFormatRules(newUser.id) //FIXME habría que cambiar el localhost para que apunte a la ip del servicio de snippets
             ResponseEntity.ok(newUser)
         }
     }
@@ -118,4 +116,6 @@ class UserController(
     override fun getUserByEmail(@PathVariable email: String): ResponseEntity<Author> {
         return ResponseEntity.ok(userService.getByEmail(email)!!)
     }
+
+
 }
