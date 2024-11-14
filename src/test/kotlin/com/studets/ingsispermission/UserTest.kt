@@ -58,7 +58,6 @@ class UserTest {
     @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `can get user by email`() {
         val user = userController.getUserByEmail("mati@example.com")
-        println("user: $user")
         assertNotNull(user.body, "User should not be null")
     }
 

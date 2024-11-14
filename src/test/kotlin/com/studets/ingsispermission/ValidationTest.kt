@@ -72,7 +72,6 @@ class ValidationTest {
     @BeforeEach
     fun printDatabaseContents() {
         val users = userRepository.findAll()
-        println("Current users in database:")
         users.forEach {
             println("User ID: ${it.id}, Email: ${it.email}, Auth0 ID: ${it.auth0Id}")
         }

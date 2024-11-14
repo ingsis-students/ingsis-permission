@@ -76,7 +76,6 @@ class UserController(
     @GetMapping("/get-user-snippets/{userId}")
     override fun getUserSnippets(@PathVariable userId: String): ResponseEntity<List<UserSnippetDto>> {
         val snippets = userService.getSnippetsOfUser(userId)
-        println("SNIPPETS HERE $snippets")
         return ResponseEntity.ok(snippets)
     }
 
@@ -109,7 +108,6 @@ class UserController(
 
     @GetMapping("/snippets/{id}")
     override fun getUserSnippetsId(@PathVariable id: Long): ResponseEntity<List<Long>> {
-        println("hitted the snippets/id endpoint")
         return userService.getSnippetsId(id)
     }
 
