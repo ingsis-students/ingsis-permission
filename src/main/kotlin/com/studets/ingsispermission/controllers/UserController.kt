@@ -116,6 +116,4 @@ class UserController(
     override fun getUserByEmail(@PathVariable email: String): ResponseEntity<Author> {
         return ResponseEntity.ok(userService.getByEmail(email)!!)
     }
-
-
 }

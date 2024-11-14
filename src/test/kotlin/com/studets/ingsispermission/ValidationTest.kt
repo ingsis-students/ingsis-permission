@@ -5,12 +5,9 @@ import com.studets.ingsispermission.controllers.UserController
 import com.studets.ingsispermission.entities.Author
 import com.studets.ingsispermission.entities.CreateUser
 import com.studets.ingsispermission.entities.Snippet
-import com.studets.ingsispermission.errors.UserNotFoundException
 import com.studets.ingsispermission.repositories.UserRepository
 import com.studets.ingsispermission.repositories.UserSnippetsRepository
 import com.studets.ingsispermission.services.UserService
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyLong
@@ -115,6 +112,7 @@ class ValidationTest {
     @WithMockUser(authorities = ["SCOPE_read:snippets"])
     fun `should validate and return user id`() {
         val auth0Id = "auth0-123"
+        val userId = 1L
         val jwt = Mockito.mock(Jwt::class.java)
 
         val claims = mapOf("sub" to auth0Id)
@@ -122,7 +120,7 @@ class ValidationTest {
         Mockito.`when`(jwtDecoder.decode(token.removePrefix("Bearer "))).thenReturn(jwt)
         Mockito.`when`(jwt.claims).thenReturn(claims)
 
-        val user = Author(email = "user@example.com", auth0Id = auth0Id)
+        val user = Author(id = userId, email = "user@example.com", auth0Id = auth0Id)
 
         whenever(userService.getByAuthId(auth0Id)).thenReturn(user)
 
@@ -132,6 +130,6 @@ class ValidationTest {
                 .contentType(MediaType.APPLICATION_JSON)
         )
             .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.content().string(user.id.toString()))
+            .andExpect(MockMvcResultMatchers.content().string(userId.toString()))
     }
 }
