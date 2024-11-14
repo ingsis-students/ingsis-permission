@@ -8,7 +8,6 @@ import com.studets.ingsispermission.entities.request_types.CheckRequest
 import com.studets.ingsispermission.entities.request_types.UserSnippet
 import com.studets.ingsispermission.errors.UserNotFoundException
 import com.studets.ingsispermission.routes.UserControllerRoutes
-import com.studets.ingsispermission.services.SnippetService
 import com.studets.ingsispermission.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -28,7 +27,6 @@ import javax.security.auth.callback.ConfirmationCallback.OK
 class UserController(
     private val userService: UserService,
     private val jwtDecoder: JwtDecoder,
-    private val snippetService: SnippetService
 ) : UserControllerRoutes {
 
     @PostMapping("/")
@@ -47,8 +45,6 @@ class UserController(
             ResponseEntity.status(OK).body(existingUser)
         } else {
             val newUser = userService.createUser(createUser.email, auth0Id)
-            // snippetService.postDefaultLintRules(newUser.id!!)
-            // snippetService.postDefaultFormatRules(newUser.id) //FIXME habría que cambiar el localhost para que apunte a la ip del servicio de snippets
             ResponseEntity.ok(newUser)
         }
     }

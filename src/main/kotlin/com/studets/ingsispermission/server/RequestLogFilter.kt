@@ -10,11 +10,13 @@ import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.LoggerFactory
 import org.slf4j.Logger
 import org.slf4j.MDC
+import org.springframework.aot.generate.Generated
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import java.io.IOException
 
 @Component
+@Generated
 @Order(2)
 class RequestLogFilter : Filter {
     @Throws(IOException::class, ServletException::class)
