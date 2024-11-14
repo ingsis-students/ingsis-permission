@@ -1,36 +1,24 @@
 package com.studets.ingsispermission
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.studets.ingsispermission.controllers.UserController
 import com.studets.ingsispermission.entities.Author
-import com.studets.ingsispermission.entities.CreateUser
 import com.studets.ingsispermission.entities.Snippet
-import com.studets.ingsispermission.errors.UserNotFoundException
 import com.studets.ingsispermission.repositories.UserRepository
 import com.studets.ingsispermission.repositories.UserSnippetsRepository
-import com.studets.ingsispermission.services.UserService
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.mockito.ArgumentMatchers.anyLong
-import org.mockito.Mockito
 import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.MediaType
-import org.springframework.security.oauth2.jwt.JwtDecoder
 import org.springframework.security.test.context.support.WithMockUser
 import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @SpringBootTest()
 @ActiveProfiles("test")
-@AutoConfigureMockMvc(addFilters = false)
 class UserTest {
     @Autowired
     private lateinit var userController: UserController
@@ -40,18 +28,6 @@ class UserTest {
 
     @MockBean
     private lateinit var userSnippetsRepository: UserSnippetsRepository
-
-    @Autowired
-    private lateinit var mockMvc: MockMvc
-
-    @MockBean
-    private lateinit var userService: UserService
-
-    @MockBean
-    private lateinit var jwtDecoder: JwtDecoder
-
-    @Autowired
-    private lateinit var objectMapper: ObjectMapper
 
     @BeforeEach
     fun setup() {
@@ -96,34 +72,22 @@ class UserTest {
 
     @Test
     @WithMockUser(authorities = ["SCOPE_read:snippets"])
-    fun `should create user if not exists`() {
-        val email = "newuser@example.com"
-        val auth0Id = "auth0-1234"
-        val token = "Bearer mocktoken"
+    fun `should return snippets by user id`() {
+        val user = userRepository.findByEmail("mati@example.com")
+        val response = userController.getUserSnippetsId(user!!.id!!)
 
-        val newUser = Author(email = email, auth0Id = auth0Id)
-        val createUser = CreateUser(email = email)
+        assertNotNull(response.body, "Snippet IDs should not be null")
+        assertEquals(1, response.body!!.size, "There should be one snippet ID")
+        assertEquals(1, response.body!![0], "Snippet ID should match expected value")
+    }
 
-        val jwt = Mockito.mock(org.springframework.security.oauth2.jwt.Jwt::class.java)
-        val claims = mapOf("sub" to auth0Id)
-
-        Mockito.`when`(jwt.claims).thenReturn(claims)
-        Mockito.`when`(jwtDecoder.decode(token.removePrefix("Bearer ")))
-            .thenReturn(jwt)
-
-        Mockito.doThrow(UserNotFoundException("User not found when trying to get by email"))
-            .`when`(userService).getByEmail(email)
-
-        Mockito.`when`(userService.createUser(email, auth0Id))
-            .thenReturn(newUser)
-
-        mockMvc.perform(
-            MockMvcRequestBuilders.post("/api/user/")
-                .header("Authorization", token)
-                .content(objectMapper.writeValueAsString(createUser))
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(MockMvcResultMatchers.status().isOk)
-            .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(email))
+    @Test
+    @WithMockUser(authorities = ["SCOPE_read:snippets"])
+    fun `should return snippets of user by auth id`() {
+        val auth0Id = "auth0-123"
+        val userSnippets = userController.getUserSnippets(auth0Id)
+        assertNotNull(userSnippets.body, "User snippets should not be null")
+        assertEquals(1, userSnippets.body!!.size, "User should have one snippet")
+        assertEquals(2, userSnippets.body!![0].snippetId, "Snippet ID should match expected value")
     }
 }

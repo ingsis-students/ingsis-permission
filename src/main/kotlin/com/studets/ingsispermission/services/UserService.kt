@@ -34,10 +34,8 @@ class UserService(
     }
 
     fun getSnippetsOfUser(id: String): List<UserSnippetDto> {
-        println("HAVE ID $id")
         try {
             val user = getByAuthId(id)
-            println("USER HERE $user")
             return userSnippetsRepository.findByAuthorId(user?.id!!).map { UserSnippetDto(it.snippetId, it.role) }
         } catch (e: Exception) {
             throw UserNotFoundException("User not found when trying to get snippets")
@@ -84,7 +82,6 @@ class UserService(
     }
 
     fun checkIfOwner(snippetId: Long, email: String): ResponseEntity<String> {
-        println("USER EMAIL HERE $email")
         val user = userRepository.findByEmail(email)
             ?: throw UserNotFoundException("User not found when trying to check if it is the owner of a snippet")
 
