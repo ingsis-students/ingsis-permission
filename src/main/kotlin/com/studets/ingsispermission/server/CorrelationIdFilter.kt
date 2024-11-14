@@ -8,12 +8,14 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.MDC
+import org.springframework.aot.generate.Generated
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Component
 import java.io.IOException
 import java.util.UUID
 
 @Component
+@Generated
 @Order(1)
 class CorrelationIdFilter : Filter {
     @Throws(IOException::class, ServletException::class)
